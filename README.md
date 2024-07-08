@@ -57,3 +57,18 @@ streamlit run openvino-client.py
 
 ## Examples
 ![pic1](./resources//ss.png)
+
+
+## Contributing
+Contributions are welcome! Please feel free to submit a Pull Request or open an issue for any bugs, improvements, or suggestions.
+
+## License
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+## Acknowledgments
+Intel OpenVINO
+Hugging Face
+Langchain
+Streamlit
+
+For more information, visit the [Openvin official website.](https://docs.openvino.ai/2024/index.html)
