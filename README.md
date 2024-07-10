@@ -73,4 +73,4 @@ Hugging Face
 Langchain
 Streamlit
 
-For more information, visit the [Openvin official website.](https://docs.openvino.ai/2024/index.html)
+For more information, visit the [Openvino official website.](https://docs.openvino.ai/2024/index.html)
