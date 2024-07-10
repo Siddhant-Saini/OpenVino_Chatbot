@@ -36,6 +36,33 @@ def prepare_model(model_vendor, model_id, group_size:int, ratio:float, int4_mode
     else:
         print('\n** Skip generation of FP16 IR model (directory already exists)')
 
+        # INT8
+    if generate_int8 and not os.path.exists(int8_model_dir / ov_model_file_name):
+        print('\n** Generating an INT8 IR model')
+        ov_model = OVModelForCausalLM.from_pretrained(fp16_model_dir, compile=False, cache_dir=cache_dir, ov_config={'CACHE_DIR':cache_dir})
+        quantizer = OVQuantizer.from_pretrained(ov_model, cache_dir=cache_dir)
+        quantizer.quantize(save_directory=int8_model_dir, weights_only=True)
+        del quantizer
+        del ov_model
+        gc.collect()
+    else:
+        print('\n** Skip generation of INT8 IR model (directory already exists)')
+
+    # INT4
+    if generate_int4 and not os.path.exists(int4_model_dir / ov_model_file_name):
+        print(f'\n** Generating an INT4_{int4_mode} IR model')
+        ov_model = OVModelForCausalLM.from_pretrained(fp16_model_dir, compile=False, cache_dir=cache_dir, ov_config={'CACHE_DIR':cache_dir})
+        int4_model_dir.mkdir(parents=True, exist_ok=True)
+        ov_model = ov.Core().read_model(fp16_model_dir / ov_model_file_name)
+        shutil.copy(fp16_model_dir / 'config.json', int4_model_dir / 'config.json')
+        comp_mode = nncf.CompressWeightsMode.INT4_ASYM if int4_mode=='ASYM' else nncf.CompressWeightsMode.INT4_SYM
+        compressed_model = nncf.compress_weights(ov_model, mode=comp_mode, ratio=ratio, group_size=group_size)
+        ov.save_model(compressed_model, int4_model_dir / ov_model_file_name)
+        del ov_model
+        del compressed_model
+        gc.collect()
+    else:
+        print('\n** Skip generation of INT4 IR model (directory already exists)')
 
 
 print('*** LLM model downloader')
