@@ -54,6 +54,8 @@ streamlit run openvino-client.py
 |6|`requirements.txt`|Python module requirements file|
 |7|`huggingface_login.py`|Login to HuggingFace hub.|
 
+## Architecture
+![pic1](./resources//Architecture_Diagram.png)
 
 ## Examples
 ![pic1](./resources//ss.png)
